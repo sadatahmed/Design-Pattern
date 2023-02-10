@@ -8,10 +8,10 @@
 import Foundation
 
 final class HomeViewModel {
-    var welcomeMsg: ObservableObject<String?> = ObservableObject(nil)
+    @Published var welcomeMsg: String?
     
     func loggedInUserWelcomeMsg() {
         let user = NetworkService.shared.getUser()
-        welcomeMsg.value = "Welcom \(user?.firstName ?? "") \(user?.lastName ?? "")"
+        welcomeMsg = "Welcom \(user?.firstName ?? "") \(user?.lastName ?? "")"
     }
 }

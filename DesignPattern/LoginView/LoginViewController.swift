@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class LoginViewController: UIViewController {
 
@@ -13,6 +14,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordTF: UITextField!
     @IBOutlet weak var errorMsgLbl: UILabel!
     
+    private var cancellables: Set<AnyCancellable> = []
     let viewModel = LoginViewModel()
     
     override func viewDidLoad() {
@@ -22,14 +24,14 @@ class LoginViewController: UIViewController {
     }
     
     func binders() {
-        viewModel.error.bind { [weak self] error in
+        viewModel.$error.sink { [weak self] error in
             if let error = error {
                 self?.errorMsgLbl.text = error
                 print(error)
             } else {
                 self?.goToHomePage()
             }
-        }
+        }.store(in: &cancellables)
     }
     
     private func goToHomePage() {

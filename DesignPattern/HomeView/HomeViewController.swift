@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import Combine
 
 class HomeViewController: UIViewController {
 
     @IBOutlet weak var welcomeLbl: UILabel!
     
+    private var cancellables: Set<AnyCancellable> = []
     let viewModel = HomeViewModel()
     
     override func viewDidLoad() {
@@ -21,8 +23,8 @@ class HomeViewController: UIViewController {
     }
     
     func binding() {
-        viewModel.welcomeMsg.bind { [weak self] msg in
+        viewModel.$welcomeMsg.sink { [weak self] msg in
             self?.welcomeLbl.text = msg
-        }
+        }.store(in: &cancellables)
     }
 }
